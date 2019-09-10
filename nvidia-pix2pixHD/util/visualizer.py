@@ -1,16 +1,22 @@
+# Copyright (C) 2017 NVIDIA Corporation. All rights reserved.
+# Licensed under the CC BY-NC-SA 4.0 license
+# (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+import ntpath
 import numpy as np
 import os
-import ntpath
-import time
-from . import util
-from . import html
 import scipy.misc
+import time
+
+from . import html
+from . import util
 try:
     from StringIO import StringIO  # Python 2.7
 except ImportError:
     from io import BytesIO         # Python 3.x
 
+
 class Visualizer():
+
     def __init__(self, opt):
         # self.opt = opt
         self.tf_log = opt.tf_log
@@ -35,7 +41,7 @@ class Visualizer():
 
     # |visuals|: dictionary of images to display or save
     def display_current_results(self, visuals, epoch, step):
-        if self.tf_log: # show images in tensorboard output
+        if self.tf_log:  # show images in tensorboard output
             img_summaries = []
             for label, image_numpy in visuals.items():
                 # Write the image to a string
@@ -45,7 +51,8 @@ class Visualizer():
                     s = BytesIO()
                 scipy.misc.toimage(image_numpy).save(s, format="jpeg")
                 # Create an Image object
-                img_sum = self.tf.Summary.Image(encoded_image_string=s.getvalue(), height=image_numpy.shape[0], width=image_numpy.shape[1])
+                img_sum = self.tf.Summary.Image(encoded_image_string=s.getvalue(
+                ), height=image_numpy.shape[0], width=image_numpy.shape[1])
                 # Create a Summary value
                 img_summaries.append(self.tf.Summary.Value(tag=label, image=img_sum))
 
@@ -53,14 +60,16 @@ class Visualizer():
             summary = self.tf.Summary(value=img_summaries)
             self.writer.add_summary(summary, step)
 
-        if self.use_html: # save images to a html file
+        if self.use_html:  # save images to a html file
             for label, image_numpy in visuals.items():
                 if isinstance(image_numpy, list):
                     for i in range(len(image_numpy)):
-                        img_path = os.path.join(self.img_dir, 'epoch%.3d_%s_%d.jpg' % (epoch, label, i))
+                        img_path = os.path.join(
+                            self.img_dir, 'epoch%.3d_%s_%d.jpg' % (epoch, label, i))
                         util.save_image(image_numpy[i], img_path)
                 else:
-                    img_path = os.path.join(self.img_dir, 'epoch%.3d_%s.jpg' % (epoch, label))
+                    img_path = os.path.join(self.img_dir, 'epoch%.3d_%s_%d.jpg' %
+                                            (epoch, label, step))
                     util.save_image(image_numpy, img_path)
 
             # update website
@@ -76,17 +85,17 @@ class Visualizer():
                         for i in range(len(image_numpy)):
                             img_path = 'epoch%.3d_%s_%d.jpg' % (n, label, i)
                             ims.append(img_path)
-                            txts.append(label+str(i))
+                            txts.append(label + str(i))
                             links.append(img_path)
                     else:
-                        img_path = 'epoch%.3d_%s.jpg' % (n, label)
+                        img_path = 'epoch%.3d_%s_%d.jpg' % (n, label, step)
                         ims.append(img_path)
                         txts.append(label)
                         links.append(img_path)
                 if len(ims) < 10:
                     webpage.add_images(ims, txts, links, width=self.win_size)
                 else:
-                    num = int(round(len(ims)/2.0))
+                    num = int(round(len(ims) / 2.0))
                     webpage.add_images(ims[:num], txts[:num], links[:num], width=self.win_size)
                     webpage.add_images(ims[num:], txts[num:], links[num:], width=self.win_size)
             webpage.save()
@@ -95,7 +104,8 @@ class Visualizer():
     def plot_current_errors(self, errors, step):
         if self.tf_log:
             for tag, value in errors.items():
-                summary = self.tf.Summary(value=[self.tf.Summary.Value(tag=tag, simple_value=value)])
+                summary = self.tf.Summary(
+                    value=[self.tf.Summary.Value(tag=tag, simple_value=value)])
                 self.writer.add_summary(summary, step)
 
     # errors: same format as |errors| of plotCurrentErrors

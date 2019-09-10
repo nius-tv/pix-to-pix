@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  pixtopix:
+    # TODO: Compile own image
+    image: floydhub/pytorch:0.3.0-gpu.cuda8cudnn6-py3.24
+    volumes:
+      - .:/service
+    command: bash -c "pip install dominate && bash"
+    shm_size: 1gb

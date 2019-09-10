@@ -1,13 +1,20 @@
 docker build \
-    -t nvidia-pix2pixHD \
+    -t pix-to-pix \
     .
 
-TODO: experiment with different settings in "train.py". See https://github.com/NVIDIA/pix2pixHD/blob/5a2c87201c5957e2bf51d79b8acddb9cc1920b26/options/base_options.py#L13-L61
+docker run \
+    -v ~/data/video:/data \
+    -v ~/models:/models \
+    -it us.gcr.io/plasmic/pix-to-pix \
+    bash
+
+TODO: experiment with different settings in "train.py". 
+See https://github.com/NVIDIA/pix2pixHD/blob/5a2c87201c5957e2bf51d79b8acddb9cc1920b26/options/base_options.py#L13-L61
 
 python train.py \
-    --checkpoints_dir /models/pix2pix/
+    --checkpoints_dir /models/pix-to-pix/
     --continue_train \
-    --dataroot /data/pix2pix/ \
+    --dataroot /data/pix-to-pix/ \
     --label_nc 0 \
     --name nius \
     --no_flip \
