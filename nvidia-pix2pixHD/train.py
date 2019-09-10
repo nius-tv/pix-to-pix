@@ -100,7 +100,7 @@ for epoch in range(start_epoch, opt.niter + opt.niter_decay + 1):
 
         # save latest model
         if total_steps % opt.save_latest_freq == save_delta:
-            print('saving the latest model (epoch %d, total_steps %d)' % (epoch, total_steps))
+            print('saving the latest model (epoch %d, total_steps %d)' % (epoch, total_steps), '-path:', iter_path)
             model.module.save('latest')
             np.savetxt(iter_path, (epoch, epoch_iter), delimiter=',', fmt='%d')
 
