@@ -1,6 +1,11 @@
+import cv2
+import numpy as np
+
+from config import *
 from data.data_loader import CreateDataLoader
 from models.models import create_model
 from options.test_options import TestOptions
+from PIL import Image
 
 
 def get_model(input_dir, output_dir, checkpoints_dir):
@@ -36,18 +41,14 @@ def tensor2image(image):
 
 
 if __name__ == '__main__':
-    input_dir = '/data/landmarks'
-    output_dir = '/data/inferred'
-    checkpoints_dir = '/models'
+    dataset, model = get_model(INPUT_DIR_PATH, OUTPUT_DIR_PATH, CHECKPOINTS_DIR_PATH)
 
-    dataset, model = get_model(input_dir, output_dir, checkpoints_dir)
-
-    # num = len(dataset)
-    # for i, data in enumerate(dataset):
-    #     output_file_path = '{}/{:010d}.{}'.format(storage_output_path, i + 1, IMG_FMT)
-    #     print(i + 1, '/', num, output_file_path)
-    #     # Infer image from input image
-    #     generated = model.inference(data['label'], data['inst'])
-    #     img = tensor2image(generated.data[0])
-    #     # Save image to storage
-    #     storage.save_img(img, output_file_path)
+    num = len(dataset)
+    for i, data in enumerate(dataset):
+        output_file_path = '{}/{:010d}.{}'.format(OUTPUT_DIR_PATH, i + 1, IMG_FMT)
+        print(i + 1, '/', num, output_file_path)
+        # Infer image from input image
+        generated = model.inference(data['label'], data['inst'])
+        img = tensor2image(generated.data[0])
+        # Save image
+        cv2.imwrite(output_file_path, img)
