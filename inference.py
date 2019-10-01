@@ -10,7 +10,7 @@ from PIL import Image
 
 def get_model(input_dir, output_dir, checkpoints_dir):
     opt = TestOptions().parse(save=False)
-    opt.name = 'nius'
+    opt.name = 'pix-to-pix'
     opt.label_nc = 0
     opt.dataroot = input_dir
     opt.no_instance = True
