@@ -8,7 +8,6 @@ RUN apt-get install -y lsb-release # required by gcsfuse
 RUN pip install dominate==2.4.0
 
 COPY . /app
-RUN mkdir /data
 
 # Install GCSFUSE
 RUN export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s` && \
