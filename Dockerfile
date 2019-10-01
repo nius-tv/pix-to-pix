@@ -9,8 +9,8 @@ RUN pip install dominate==2.4.0
 
 COPY . /app
 
-RUN export PYTHONPATH=/app
-RUN export PYTHONPATH=/app/nvidia-pix2pixHD:$PYTHONPATH
+ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/nvidia-pix2pixHD:$PYTHONPATH
 
 # Install GCSFUSE
 RUN export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s` && \
