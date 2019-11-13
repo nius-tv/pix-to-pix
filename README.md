@@ -1,13 +1,10 @@
+mkdir /data
+mkdir /models
+
 docker build \
     -t pix-to-pix \
     .
 
-# Train
-docker run \
-    -v ~/data/video:/data \
-    -v ~/models:/models \
-    -it us.gcr.io/plasmic/pix-to-pix \
-    bash
 
 # Inference
 docker run \
@@ -16,14 +13,20 @@ docker run \
     -v $(PWD)/models:/models \
     -v $(PWD)/pix-to-pix:/app \
     -it us.gcr.io/plasmic/pix-to-pix \
+# Train
+nvidia-docker run \
+    --shm-size 2G \
+    -v /data:/data \
+    -v /models:/models \
+    -it us.gcr.io/plasmic-artefacts-2/pix-to-pix \
     bash
 
 # TODO: experiment with different settings in "train.py". 
 See https://github.com/NVIDIA/pix2pixHD/blob/5a2c87201c5957e2bf51d79b8acddb9cc1920b26/options/base_options.py#L13-L61
 
+# --continue_train \
 python train.py \
-    --checkpoints_dir /models
-    --continue_train \
+    --checkpoints_dir /models \
     --dataroot /data \
     --label_nc 0 \
     --name nius \
