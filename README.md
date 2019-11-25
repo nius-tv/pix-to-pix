@@ -1,10 +1,16 @@
 mkdir /data
 mkdir /models
 
+gsutil \
+    -m copy \
+    -r gs://plasmic-training/prep-video-train/* \
+    /data
+
 docker build \
     -t pix-to-pix \
     .
 
+gcloud docker -- pull us.gcr.io/plasmic-artefacts-2/pix-to-pix
 
 # Inference
 docker run \
