@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import yaml
 
 from config import *
 from data.data_loader import CreateDataLoader
@@ -8,9 +9,9 @@ from options.test_options import TestOptions
 from PIL import Image
 
 
-def get_model(input_dir, output_dir, checkpoints_dir):
+def get_model(input_dir, output_dir, checkpoints_dir, model_name):
     opt = TestOptions().parse(save=False)
-    opt.name = 'pix-to-pix'
+    opt.name = model_name
     opt.label_nc = 0
     opt.dataroot = input_dir
     opt.no_instance = True
@@ -28,6 +29,12 @@ def get_model(input_dir, output_dir, checkpoints_dir):
     return dataset, model
 
 
+def load_story():
+    with open(STORY_FILE_PATH) as f:
+        data = f.read()
+    return yaml.load(data, Loader=yaml.FullLoader)
+
+
 def tensor2image(image):
 	numpy_image = image.cpu().float().numpy()
 	numpy_image = (np.transpose(numpy_image, (1, 2, 0)) + 1) / 2.0 * 255.0
@@ -41,7 +48,8 @@ def tensor2image(image):
 
 
 if __name__ == '__main__':
-    dataset, model = get_model(INPUT_DIR_PATH, OUTPUT_DIR_PATH, CHECKPOINTS_DIR_PATH)
+    model_name = load_story()['pixToPixModel']
+    dataset, model = get_model(STORY_DIR_PATH, OUTPUT_DIR_PATH, MODELS_DIR_PATH, model_name)
 
     num = len(dataset)
     for i, data in enumerate(dataset):
