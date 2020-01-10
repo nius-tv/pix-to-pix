@@ -4,6 +4,7 @@ import yaml
 
 from config import *
 from data.data_loader import CreateDataLoader
+from google.cloud import error_reporting
 from models.models import create_model
 from options.test_options import TestOptions
 from PIL import Image
@@ -48,15 +49,20 @@ def tensor2image(image):
 
 
 if __name__ == '__main__':
-    model_name = load_story()['pixToPixModel']
-    dataset, model = get_model(STORY_DIR_PATH, OUTPUT_DIR_PATH, MODELS_DIR_PATH, model_name)
+    error_client = error_reporting.Client()
+    try:
+        model_name = load_story()['pixToPixModel']
+        dataset, model = get_model(STORY_DIR_PATH, OUTPUT_DIR_PATH, MODELS_DIR_PATH, model_name)
 
-    num = len(dataset)
-    for i, data in enumerate(dataset):
-        output_file_path = '{}/{:010d}.{}'.format(OUTPUT_DIR_PATH, i + 1, IMG_FMT)
-        print(i + 1, '/', num, output_file_path)
-        # Infer image from input image
-        generated = model.inference(data['label'], data['inst'])
-        img = tensor2image(generated.data[0])
-        # Save image
-        assert cv2.imwrite(output_file_path, img)
+        num = len(dataset)
+        for i, data in enumerate(dataset):
+            output_file_path = '{}/{:010d}.{}'.format(OUTPUT_DIR_PATH, i + 1, IMG_FMT)
+            print(i + 1, '/', num, output_file_path)
+            # Infer image from input image
+            generated = model.inference(data['label'], data['inst'])
+            img = tensor2image(generated.data[0])
+            # Save image
+            assert cv2.imwrite(output_file_path, img)
+    except Exception:
+        error_client.report_exception()
+        raise
