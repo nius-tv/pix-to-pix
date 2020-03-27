@@ -51,7 +51,7 @@ def tensor2image(image):
 if __name__ == '__main__':
     error_client = error_reporting.Client()
     try:
-        model_name = load_story()['pixToPixModel']
+        model_name = load_story()['model']
         dataset, model = get_model(STORY_DIR_PATH, OUTPUT_DIR_PATH, MODELS_DIR_PATH, model_name)
 
         num = len(dataset)
