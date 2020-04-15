@@ -64,9 +64,9 @@ if __name__ == '__main__':
         num = len(dataset)
         for i, data in enumerate(dataset):
             output_file_path = '{}/{:010d}.{}'.format(OUTPUT_DIR_PATH, i + 1, IMG_FMT)
-            print(i + 1, '/', num, output_file_path)
+            print(i + 1, '/', num, output_file_path, '-start_frame:', start_frame, '-end_frame:', end_frame)
 
-            if i <= start_frame and i >= end_frame:
+            if i <= start_frame or i >= end_frame:
                 # Infer image from input image
                 print('infer')
                 generated = model.inference(data['label'], data['inst'])
