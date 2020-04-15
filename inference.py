@@ -58,8 +58,8 @@ if __name__ == '__main__':
         dataset, model = get_model(STORY_DIR_PATH, OUTPUT_DIR_PATH, MODELS_DIR_PATH, model_name)
 
         transitions = story['transitions']
-        start_frame = Math.ceil(transitions['start'] * FPS)
-        end_frame = Math.floor(transitions['end'] * FPS)
+        start_frame = math.ceil(transitions['start'] * FPS)
+        end_frame = math.floor(transitions['end'] * FPS)
 
         num = len(dataset)
         for i, data in enumerate(dataset):
