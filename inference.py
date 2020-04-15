@@ -1,4 +1,5 @@
 import cv2
+import math
 import numpy as np
 import yaml
 
@@ -51,16 +52,30 @@ def tensor2image(image):
 if __name__ == '__main__':
     error_client = error_reporting.Client()
     try:
-        model_name = load_story()['model']
+        story = load_story()
+
+        model_name = story['model']
         dataset, model = get_model(STORY_DIR_PATH, OUTPUT_DIR_PATH, MODELS_DIR_PATH, model_name)
+
+        transitions = story['transitions']
+        start_frame = Math.ceil(transitions['start'] * FPS)
+        end_frame = Math.floor(transitions['end'] * FPS)
 
         num = len(dataset)
         for i, data in enumerate(dataset):
             output_file_path = '{}/{:010d}.{}'.format(OUTPUT_DIR_PATH, i + 1, IMG_FMT)
             print(i + 1, '/', num, output_file_path)
-            # Infer image from input image
-            generated = model.inference(data['label'], data['inst'])
-            img = tensor2image(generated.data[0])
+
+            if i <= start_frame and i >= end_frame:
+                # Infer image from input image
+                print('infer')
+                generated = model.inference(data['label'], data['inst'])
+                img = tensor2image(generated.data[0])
+
+            else:
+                shape = (SCALED_VIDEO_RESOLUTION[1], SCALED_VIDEO_RESOLUTION[0]) # columns, rows
+                img = np.zeros(shape, np.uint8)
+
             # Save image
             assert cv2.imwrite(output_file_path, img)
     except Exception:
