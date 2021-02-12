@@ -5,7 +5,6 @@ RUN apt-get update -y
 RUN pip install dominate==2.4.0
 RUN pip install google-cloud-error-reporting==0.33.0
 RUN pip install protobuf==3.11.2
-RUN pip install pyyaml==5.1.2
 
 COPY . /app
 
