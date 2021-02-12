@@ -2,8 +2,13 @@ FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime
 
 RUN apt-get update -y
 
+RUN apt-get install -y libglib2.0-0 # required by opencv-python
+RUN apt-get install -y libx11-6 # required by opencv-python
+RUN apt-get install -y libxtst6 # required by opencv-python
+
 RUN pip install dominate==2.4.0
 RUN pip install google-cloud-error-reporting==0.33.0
+RUN pip install opencv-python==4.5.1.48
 RUN pip install protobuf==3.11.2
 
 COPY . /app
