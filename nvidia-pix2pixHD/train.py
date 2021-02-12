@@ -92,7 +92,7 @@ for epoch in range(start_epoch, opt.niter + opt.niter_decay + 1):
             visualizer.plot_current_errors(errors, total_steps)
 
         # display output images
-        if True:
+        if i % 100 == 0:
             visuals = OrderedDict([('synthesized_image', util.tensor2im(generated.data[0]))])
             visualizer.display_current_results(visuals, epoch, total_steps)
 
