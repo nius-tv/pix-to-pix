@@ -1,4 +1,4 @@
-FROM floydhub/pytorch:0.3.0-gpu.cuda8cudnn6-py3.24
+FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime
 
 RUN apt-get update -y
 
