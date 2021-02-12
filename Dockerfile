@@ -13,6 +13,7 @@ ENV PYTHONPATH=/app/nvidia-pix2pixHD:$PYTHONPATH
 
 # Install gcsfuse
 RUN apt-get install -y curl
+RUN apt-get install -y gnupg2
 RUN apt-get install -y lsb-release
 
 RUN export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s` && \
